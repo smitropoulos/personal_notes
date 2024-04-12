@@ -1,0 +1,26 @@
+@document.meta
+title: 25
+description: 
+authors: smitropoulos
+categories: 
+created: 2024-02-25T11:39:12+0200
+updated: 2024-02-25T11:39:12+0200
+version: 1.1.1
+@end
+
+## Chores
+- [x] X
+
+## Study
+
+## Quotes
+
+## Battles
+
+## Misc
+
+A tour of C++
+
+3.2    Modules need to be compiled before being imported. They do not bring in transient imports/includes.
+3.4.2  Copy elision: 
+
