@@ -1,0 +1,241 @@
+@document.meta
+title: fmt
+description: 
+authors: smitropoulos
+categories: [
+  cpp
+  library
+]
+created: 2024-04-14T15:05:30+0200
+updated: 2024-04-14T15:05:30+0200
+version: 1.1.1
+@end
+
+[Github link]{https://github.com/fmtlib/fmt}
+
+*fmt is an open-source formatting library providing a fast and safe alternative to C stdio and C++ iostreams.*
+
+* Synopsis
+  [Cheat Sheets - Printing and formatting]{https://hackingcpp.com/cpp/libs/fmt.png}
+  [Cheat Sheets - Time&Date formatting]{https://hackingcpp.com/cpp/libs/fmt_spec_chrono.png}
+
+** Formatting 
+
+   @code cpp
+   fmt::format(string) → std::string
+   fmt::format(format-string, arguments...) → std::string
+   fmt::format_to(@output, format-string, arguments...)
+   @end
+
+   @code cpp
+   #include <fmt/core.h>
+   #include <iostream>
+
+   int main () {
+     auto str = fmt::format("in {}s\n", 47);
+     std::cout << str;  // in 47s
+   }
+   @end
+
+** Printing
+
+   @code cpp
+   fmt::print(string)
+   fmt::print(format-string, arguments...)
+   fmt::print(file, format-string, arguments...)
+   @end
+
+   @code cpp
+   #include <fmt/core.h>
+
+   int main () {
+     fmt::print("in {}s\n", 47);  // in 47s
+     fmt::print(stderr, "error: {}\n", 404);  // error: 404
+   }
+   @end
+
+
+* General
+
+** Headers
+
+   @code cpp
+   <fmt/core.h>	lightweight subset of formatting API
+     <fmt/format.h>	full API = core.h + compile-time format checks, iterators, user-def. types, …
+   <fmt/args.h>	core.h + dynamic format arguments
+   <fmt/chrono.h>	format.h + date and time formatting
+   <fmt/compile.h>	format.h + format string compilation
+   <fmt/color.h>	format.h + terminal color and text style
+   <fmt/os.h>	format.h + file output, system APIs
+   <fmt/ostream.h>	format.h + std::ostream support
+   <fmt/printf.h>	format.h + printf formatting
+   <fmt/ranges.h>	format.h + formatting support for ranges and tuples
+   <fmt/xchar.h>	format.h + wchar_t support
+   @end
+
+** Argument placeholder
+
+   @code cpp
+   #include <fmt/core.h>
+
+   int main () {
+     int i = 7; 
+     double d = 3.4;
+     std::string s = "text";
+     fmt::print("fast {} output\n", s);//  fast text output
+     fmt::print("{} times\n", 47);     //  47 times
+     fmt::print("{} of {}\n", i, 9);   //  7 of 9
+     fmt::print("{}|{}|{}\n", d, i, 5);//  3.4|7|5               
+     fmt::print("escaped {{ & }}\n");  //  escaped { & }
+   }
+
+   #include <vector>
+   #include <array>
+   #include <fmt/ranges.h>
+
+   int main () {
+     std::vector<double> v {1.2, 5.6, 7.8}; 
+     std::array<int,4> a {2, 3, 4, 5};
+     fmt::print("v: {}\n", v);//               v: [1.2, 5.6, 7.8]
+     fmt::print("a: {}\n", a);//               a: [2, 3, 4, 5]
+     fmt::print("{}\n", fmt::join(v,"|"));//   1.2|5.6|7.8
+   }
+   @end
+
+
+** Indexing / Naming Arguments id
+
+   @code cpp
+   #include <fmt/core.h>
+
+   int main () {
+     fmt::print("{}, {}, {}\n", 'a', 'b', 'c'); //    a, b, c
+     fmt::print("{0}, {1}, {2}\n", 'a', 'b', 'c');//  a, b, c
+     fmt::print("{2}, {1}, {0}\n", 'a', 'b', 'c');//  c, b, a
+     fmt::print("{0}{1}{0}\n", "XX", "abc");//        XXabcXX
+     int i = 20;                                    
+     double d = 3.4;                                
+     fmt::print("{1} to {0}\n", i, 10);//             10 to 20
+     fmt::print("{0} / {0}\n", d);//                  3.4 / 3.4
+   }
+
+
+   #include <fmt/format.h>  // literals
+
+   int main () {
+     int i = 2; 
+     double d = 4.567;
+     fmt::print("{x} + {x}\n", fmt::arg("x",d));//         4.567 + 4.567
+     fmt::print("{pi} * {0}\n", i, fmt::arg("pi",3.14));// 3.14 * 2
+     using namespace fmt::literals;                      
+     fmt::print("{y} | {x}\n", "x"_a=i, "y"_a=d);//        4.567 | 2
+   }
+   @end
+
+** Format specifications
+
+   @code cpp
+   #include <fmt/core.h>
+
+   int main () {
+     int i = 18; 
+     fmt::print("{:+}\n", i);    // sign always +18
+     fmt::print("{:b}\n", i);    // binary      10010
+     fmt::print("{:x}\n", i);    // hex         12
+     fmt::print("{:#x}\n", i);   // hex+prefix  0x12
+   }
+
+   #include <fmt/core.h>
+
+   int main () {
+
+     int i = 18;
+     fmt::print("{:6}\n", i);    // width 6          18
+     fmt::print("{:06}\n", i);   // 0-prefixed   000018
+     fmt::print("\n");                           
+     fmt::print("{:>6}\n", i);   // align right      18
+     fmt::print("{:*>6}\n", i);  // align right  ****18
+     fmt::print("{:*^6}\n", i);  // center       **18**
+     fmt::print("{:*<6}\n", i);  // align left   18****
+   }
+
+   #include <fmt/core.h>
+
+   int main () {
+
+     double d = 34.567;
+     fmt::print("{:.3}\n", d);   // precision 3  34.6
+     fmt::print("{:+8.3}\n", d); // width 8        +34.56
+     fmt::print("{:e}\n", d);    // exponential  3.456700e+01
+     fmt::print("{:.3e}\n", d);  // exp+prec     3.457e+01
+     fmt::print("{:-<12}\n", ""); // line        ------------
+     fmt::print("{:*>+12.1e}\n", d);//           ****+3.5e+01
+   }
+   @end
+
+** Print to file
+
+   @code cpp
+   #include <fmt/core.h>
+
+   int main () {
+     fmt::print("print to stdout\n");
+     fmt::print(stdout, "same");
+     fmt::print(stderr, "warning!");
+   }
+
+
+
+   #include <fmt/os.h>
+
+   int main () {
+     fmt::ostream out = fmt::output_file("out.txt");
+     for (int ln = 0; ln < 4; ++ln) {
+       out.print("line {}\n", ln);
+     }
+   }
+
+   /*
+    line·0\n
+    line·1\n
+    line·2\n
+    line·3\n
+    */
+
+
+   // C style 
+
+   #include <cstdio>  // fopen
+   #include <fmt/core.h>
+
+   int main () {
+     std::FILE* file = std::fopen("out.txt","w");
+     for (int ln = 0; ln < 5; ++ln) {
+       fmt::print(file, "line {}\n", ln);
+     }
+     std::fclose(file);
+   }
+
+   /*
+    line·0\n
+    line·1\n
+    line·2\n
+    line·3\n
+    line·4\n
+    */
+   @end
+
+*** File access control flags
+
+    @code cpp
+    // Overwrite existing file, create file if it doesn't exist (default)
+
+    output_file("name")
+
+    output_file("name", fmt::file::WRONLY | fmt::file::CREATE)
+
+    // Append to existing file, create file if it doesn't exist
+
+    output_file("name", fmt::file::WRONLY | fmt::file::CREATE | fmt::file::APPEND)
+
+    @end

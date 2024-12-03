@@ -1,0 +1,54 @@
+@document.meta
+title: escape_chars
+description:
+authors: smitropoulos
+categories:
+created: 2024-11-14T20:21:03+0200
+updated: 2024-11-14T20:21:03+0200
+version: 1.1.1
+@end
+
+{https://unix.stackexchange.com/a/357932}
+
+Double quotes have more complex escaping rules and don't allow you to include an exclamation mark ! if history substitution is activated, so I won't consider them further.
+
+An alternative approach is to protect characters with backslashes. This works for every character except newlines; for a newline, putting it inside single quotes (or double quotes) is the only solution. If you want to minimize the number of backslashes to present the quoted name to the user, you may restrict it to places where the backslash is needed; however, the more backslashes you omit, the more you risk forgetting one that's needed. Letters, digits and non-ASCII characters are always ok¹. Quote whitespace and punctuation whenever you're unsure.
+
+With a typical shell (ksh, bash or zsh), you need to quote the following characters in at least some circumstances.
+
+Whitespace (space, tab, newline — remembering that newlines can't be quoted with a backslash).
+
+@code sh
+'!' — history expansion.
+'"' — shell syntax.
+'#' — comment start when preceded by whitespace; zsh wildcards.
+'$' — shell syntax.
+'&' — shell syntax.
+''' — shell syntax.
+'(' — even in the middle of a word: ksh extended globs (also available in bash and zsh); zsh wildcards.
+')' - (see ()
+'*' — sh wildcard.
+',' — only inside brace expansion.
+';' — shell syntax.
+'<' — shell syntax.
+'=' — in the command name (not in arguments), if it would look like an assignment. Also, in zsh, when it's at the beginning of a file name (filename expansion with PATH lookup).
+'>' — shell syntax.
+'?' — sh wildcard.
+'[' — sh wildcard.
+'\' — shell syntax.
+']' — you may get away with leaving it unquoted.
+'^' — history expansion; zsh wildcard.
+'`' — shell syntax.
+'{' — brace expansion.
+'|' — shell syntax.
+'}' — needs to be escaped in zsh, other shells are more lenient when there's no matching opening brace.
+'~' — home directory expansion when it's at the beginning of a file name; zsh wildcard; always safe when it's the last character.
+
+
+A few more characters can require special handling sometimes:
+
+'-' isn't special for the shell, but when it's at the beginning of a command argument, it indicates an option. It can't be protected with quotes since the special handling is in the command, not in the shell. To protect a file name that begins with -, you can put ./ before it — this way it's still the same file, but the argument doesn't begin with - anymore.
+'.' isn't special in itself, but dot files are excluded from * globs by default.
+':' isn't special for the shell, but some commands parse it specially, e.g. to indicate a remote file (hostname:filename). Consult the documentation of the command to see how to cope with file nams containing colons.
+
+@end

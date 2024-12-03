@@ -1,0 +1,122 @@
+@document.meta
+title: conan
+description:
+authors: smitropoulos
+categories: [
+  cpp
+  tools
+  conan
+]
+created: 2024-04-10T10:52:29+0200
+updated: 2024-04-13T23:12:36+0200
+version: 1.1.1
+@end
+
+
+
+* Synopsis
+
+  From the *root* of the project do:
+
+  @code bash
+    conan install . --build=missing --settings=build_type=Debug
+    cmake --preset conan-debug -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS=1
+    ln -sf build/Debug/compile_commands.json .
+    cmake --build --preset conan-debug
+  @end
+
+  At this point there will be a `compile_commands.json` file symlinked for clangd.
+
+
+
+
+
+* [Conan Docs]{https://docs.conan.io/2/tutorial/consuming_packages/build_simple_cmake_project.html}
+
+** Pre-requisites
+
+*** Conan-profile
+
+    Conan profiles allow users to define a configuration set for things like the compiler, build configuration, architecture, shared or static libraries, etc. Conan, by default, will not try to detect a profile automatically, so we need to create one.
+
+** Working with Conan
+
+*** Conan.txt file
+
+    - Create a file `conan.txt`. It is in [TOML]{https://toml.io/en/}
+
+    @code bash
+    [requires]
+    spdlog/1.13.0
+
+    [test_requires]
+    gtest/1.12.1
+
+    [tool_requires]
+    cmake/[>=3.25.0]
+
+    [generators]
+    CMakeDeps
+    CMakeToolchain
+
+    [layout]
+    cmake_layout
+
+    # Shared linkage for all packages in the dependency graph
+    [options]
+    *:shared=True
+
+    # If you need more, go for a conan.py
+    @end
+
+    You can activate the new environment with the tools you installed with `$ source conanbuild.sh` from inside the build folder and deactivate it with `$ source deactivate_conanbuild.sh`
+
+
+*** Using the conan.txt file
+
+    - Do a `$ conan install . --output-folder=build --build=missing` to install missing libraries. Changing the output-folder to match our CMake file
+    - Then do
+
+    @code bash
+      cd build
+      cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_toolchain.cmake -DCMAKE_BUILD_TYPE=Release
+      cmake --build .
+    @end
+
+**** Build type specification
+     You can specify the build type (e.g. for Debug) with adding `--settings=build_type=Debug` as in `$ conan install . --output-folder=build --build=missing --settings=build_type=Debug`
+
+**** Shared libraries
+     Set this `--options=zlib/1.2.11:shared=True` to set zlib to be linked as a shared library
+     In order to actually run the executable you built with the shared library created by conan, you need to enable the conan env with
+     | `$ source conanbuild.sh`
+
+** Using conanfile.py
+   ^ https://docs.conan.io/2/tutorial/consuming_packages/the_flexibility_of_conanfile_py.html
+   The equivalent of {*** Conan.txt file}
+
+   @code python
+   from conan import ConanFile
+
+   class CompressorRecipe(ConanFile):
+     settings = "os", "compiler", "build_type", "arch"
+   generators = "CMakeToolchain", "CMakeDeps"
+
+   def requirements(self):
+     self.requires("zlib/1.2.11")
+
+   def build_requirements(self):
+     self.tool_requires("cmake/3.22.6")
+
+   # Not setting the output-folder on build time requires this. You can use only `conan install . --build=missing`
+   def layout(self):
+     # We make the assumption that if the compiler is msvc the
+     # CMake generator is multi-config
+     multi = True if self.settings.get_safe("compiler") == "msvc" else False
+     if multi:
+       self.folders.generators = os.path.join("build", "generators")
+       self.folders.build = "build"
+     else:
+       self.folders.generators = os.path.join("build", str(self.settings.build_type), "generators")
+       self.folders.build = os.path.join("build", str(self.settings.build_type))
+   @end

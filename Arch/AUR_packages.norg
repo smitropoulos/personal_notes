@@ -1,0 +1,15 @@
+@document.meta
+title: AUR_packages
+description:
+authors: smitropoulos
+categories:
+created: 2024-12-03T22:38:55+0200
+updated: 2024-12-03T22:38:55+0200
+version: 1.1.1
+@end
+
+* Make a package from a PKGBUILD
+  `makepkg --cleanbuild --clean -f`
+
+* Update sums
+  `updpkgsums`

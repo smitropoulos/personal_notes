@@ -1,0 +1,79 @@
+@document.meta
+title: spdlog
+description:
+authors: smitropoulos
+categories: [
+  cpp
+  library
+]
+created: 2024-04-14T00:15:11+0200
+updated: 2024-04-14T00:15:11+0200
+version: 1.1.1
+@end
+
+[Github link]{https://github.com/gabime/spdlog}
+
+*Very fast, header-only/compiled, C++ logging library.*
+
+* Synopsis
+  Use pre-processor macros for `__line__`, `__file__` inclusion like `SPDLOG_DEBUG`:
+
+  @code cpp
+    #include "spdlog/spdlog.h"
+    SPDLOG_INFO("global log with source info"); // Console: "[source example.cpp] [function source_info_example] [line 11] global logger with source info"
+  @end
+
+* General
+
+  The compiler directive `SPDLOG_ACTIVE_LEVEL=0` is TRACE level. The compiler flags can be used to enable or disable levels.
+
+  They are defined as:
+  @code cpp
+    #define SPDLOG_LEVEL_TRACE 0
+    #define SPDLOG_LEVEL_DEBUG 1
+    #define SPDLOG_LEVEL_INFO 2
+    #define SPDLOG_LEVEL_WARN 3
+    #define SPDLOG_LEVEL_ERROR 4
+    #define SPDLOG_LEVEL_CRITICAL 5
+    #define SPDLOG_LEVEL_OFF 6
+  @end
+
+** Usage
+
+  You can either use macros which will print `__file__` and `__line__` along with the logging messages (e.g. `SPDLOG_DEBUG`) or do `spdlog::debug`
+
+   @code cpp
+    #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO // All DEBUG/TRACE statements will be removed by the pre-processor
+    #include "spdlog/spdlog.h"
+    ...
+    SPDLOG_DEBUG("debug message to default logger"); // removed at compile time
+    SPDLOG_LOGGER_TRACE(my_logger, "trace message"); // removed at compile time
+    SPDLOG_INFO("info message to default logger");   // included
+  @end
+
+  Note that this removes the debug statements at compile time, but you still need to set the desired log level at runtime to be able to see them.
+
+
+** Source information
+
+   Some custom format patterns, such as %@, %s, %g, %#, %!, print the source information.
+
+   For these to work, you must use compile time log level macros.
+
+   @code cpp
+    #define SPDLOG_ACTIVE_LEVEL SPDLOG_LEVEL_INFO 
+    #include "spdlog/spdlog.h"
+    #include "spdlog/sinks/stdout_sinks.h"
+
+    void source_info_example()
+    {
+        auto console = spdlog::stdout_logger_mt("console");
+        spdlog::set_default_logger(console);
+        spdlog::set_pattern("[source %s] [function %!] [line %#] %v");
+
+        SPDLOG_LOGGER_INFO(console, "log with source info"); // Console: "[source example.cpp] [function source_info_example] [line 10] log with source info"
+        SPDLOG_INFO("global log with source info"); // Console: "[source example.cpp] [function source_info_example] [line 11] global logger with source info"
+
+        console->info("source info is not printed"); // Console: "[source ] [function ] [line ] source info is not printed"
+    }
+   @end

@@ -1,0 +1,15 @@
+@document.meta
+title: beej
+description: Networking guide
+authors: smitropoulos
+categories: [
+networking
+]
+created: 2024-04-29T00:35:46+0200
+updated: 2024-04-29T00:35:46+0200
+version: 1.1.1
+@end
+
+* [Beej's Guide to Network Programming]{https://beej.us/guide/bgnet/html/}
+
+

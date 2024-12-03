@@ -1,0 +1,121 @@
+@document.meta
+title: simple_server
+description:
+authors: smitropoulos
+categories: [
+  cpp
+  networking
+]
+created: 2024-04-17T19:15:17+0200
+updated: 2024-04-17T19:15:17+0200
+version: 1.1.1
+@end
+
+* General design
+  Get a listener socket to bind to a fixed hostname/ip ( `int serverSd = socket(AF_INET, SOCK_STREAM, 0);`). This is the port that the clients will connect to initially.
+  Then we need another socket which will handle the new client request. ( `int newSd = accept(serverSd, (sockaddr *)&newSockAddr, &newSockAddrSize);` )
+  Communicate with the client through the second one.
+
+* Code example
+
+  @code cpp
+  #include <iostream>
+  #include <string>
+  #include <stdio.h>
+  #include <sys/types.h>
+  #include <sys/socket.h>
+  #include <netinet/in.h>
+  #include <arpa/inet.h>
+  #include <stdlib.h>
+  #include <unistd.h>
+  #include <string.h>
+  #include <netdb.h>
+  #include <sys/uio.h>
+  #include <sys/time.h>
+  #include <sys/wait.h>
+  #include <fcntl.h>
+  #include <fstream>
+
+  //grab the port number
+  int port = 9999
+  //buffer to send and receive messages with
+  char msg[1500];
+
+  // setup a socket and connection tools
+  sockaddr_in servAddr;
+  memset(&servAddr,0, sizeof(servAddr));
+
+  servAddr.sin_family = AF_INET;
+  servAddr.sin_addr.s_addr = htonl(INADDR_ANY);
+  servAddr.sin_port = htons(port);
+
+  //open stream oriented socket with internet address
+  //also keep track of the socket descriptor
+  int serverSd = socket(AF_INET, SOCK_STREAM, 0);
+  if(serverSd < 0)
+  {
+    perror("Error establishing the server socket");
+    exit(0);
+  }
+
+  //bind the socket to its local address
+  int bindStatus = bind(serverSd, (struct sockaddr*) &servAddr, sizeof(servAddr));
+  if(bindStatus < 0)
+  {
+    perror("Error binding socket to local address");
+    exit(0);
+  }
+
+  puts("Waiting for a client to connect...");
+  //listen for up to 5 requests at a time
+  listen(serverSd, 5);
+
+  //receive a request from client using accept
+  //we need a new address to connect with the client
+  sockaddr_in newSockAddr;
+  socklen_t newSockAddrSize = sizeof(newSockAddr);
+
+  //accept, create a new socket descriptor to
+  //handle the new connection with client
+  int newSd = accept(serverSd, (sockaddr *)&newSockAddr, &newSockAddrSize);
+  if(newSd < 0)
+  {
+    perror("Error accepting request from client!");
+    exit(1);
+  }
+
+  puts("Connected with client!");
+
+  // keep track of the amount of data sent 
+  int bytesRead, bytesWritten = 0;
+  while(1)
+  {
+    //receive a message from the client (listen)
+    puts("Awaiting client response...");
+    memset(&msg, 0, sizeof(msg));//clear the buffer
+    bytesRead += recv(newSd, (char*)&msg, sizeof(msg), 0);
+    if(!strcmp(msg, "exit"))
+    {
+      puts("Client has quit the session");
+      break;
+    }
+    puts("Client: " << msg);
+    puts(">";
+    string data;
+    getline(cin, data);
+    memset(&msg, 0, sizeof(msg)); //clear the buffer
+    strcpy(msg, data.c_str());
+    if(data == "exit")
+    {
+      //send to the client that server has closed the connection
+      send(newSd, (char*)&msg, strlen(msg), 0);
+      break;
+    }
+    //send the message to client
+    bytesWritten += send(newSd, (char*)&msg, strlen(msg), 0);
+  }
+
+  close(newSd);
+  close(serverSd);
+}
+  @end

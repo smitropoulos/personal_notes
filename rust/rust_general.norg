@@ -1,0 +1,27 @@
+@document.meta
+title: general
+description: Rust book notes
+authors: smitropoulos
+categories: [
+  rust
+  language
+]
+created: 2024-08-04T16:35:49+0200
+updated: 2024-08-04T16:35:49+0200
+version: 1.1.1
+@end
+
+* Projects.
+** Creating a project.
+   Use `cargo` for this.
+   `cargo new <project name>` will create a `cargo.toml` and a `src/main.rs` as well as add this new project to git.
+   Cargo expects your source files to be inside the `src` directory.
+* Compiling and running.
+  `rustc` compiles rust files.
+  | `rustfmt` is the standard formatter.
+
+  - `cargo build` in the top directory of a cargo project, you build the project. Add `--release` for optimizations.
+  - `cargo run` builds and runs the project.
+  - `cargo check` checks if the project builds.
+  - `cargo update` will update the dependencies specified in the .toml file and then write the new dependencies in the .lock file.
+  - `cargo doc` handles package documentation. Add `--open` to open all the local docs to your browser.

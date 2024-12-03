@@ -1,0 +1,113 @@
+@document.meta
+title: asking_questions
+description:
+authors: smitropoulos
+categories: [
+general
+]
+created: 2024-04-29T00:03:55+0200
+updated: 2024-04-29T00:03:55+0200
+version: 1.1.1
+@end
+
+[How To Ask Questions The Smart Way]{http://www.catb.org/~esr/faqs/smart-questions.html}
+
+* General
+** Use meaningful, specific subject headers
+
+   - Stupid:
+     HELP! Video doesn't work properly on my laptop!
+
+   - Smart:
+     X.org 6.8.1 misshapen mouse cursor, Fooware MV1005 vid. chipset
+
+   - Smarter:
+     X.org 6.8.1 mouse cursor on Fooware MV1005 vid. chipset - is misshapen
+
+** Write in clear, grammatical, correctly-spelled language
+
+** Be precise and informative about your problem
+   - Describe the symptoms of your problem or bug carefully and clearly.
+   - Describe the environment in which it occurs (machine, OS, application, whatever). Provide your vendor's distribution and release level (e.g.: “Fedora Core 7”, “Slackware 9.1”, etc.).
+   - Describe the research you did to try and understand the problem before you asked the question.
+   - Describe the diagnostic steps you took to try and pin down the problem yourself before you asked the question.
+   - Describe any possibly relevant recent changes in your computer or software configuration.
+   - If at all possible, provide a way to reproduce the problem in a controlled environment.
+
+   Do the best you can to anticipate the questions a hacker will ask, and answer them in advance in your request for help.
+
+** Don't rush to claim that you have found a bug
+
+** Describe the problem's symptoms, not your guesses
+   - Stupid:
+     I'm getting back-to-back SIG11 errors on kernel compiles, and suspect a hairline crack on one of the motherboard traces. What's the best way to check for those?
+
+   - Smart:
+     My home-built K6/233 on an FIC-PA2007 motherboard (VIA Apollo VP2 chipset) with 256MB Corsair PC133 SDRAM starts getting frequent SIG11 errors about 20 minutes after power-on during the course of kernel compiles, but never in the first 20 minutes. Rebooting doesn't restart the clock, but powering down overnight does. Swapping out all RAM didn't help. The relevant part of a typical compile session log follows.
+
+** Describe your problem's symptoms in chronological order
+
+** Describe the goal, not the step
+   - Stupid:
+     How do I get the color-picker on the FooDraw program to take a hexadecimal RGB value?
+
+   - Smart:
+     I'm trying to replace the color table on an image with values of my choosing. Right now the only way I can see to do this is by editing each table slot, but I can't get FooDraw's color picker to take a hexadecimal RGB value.
+
+** Be explicit about your question
+
+** When asking about code
+   Generating a really small minimal test case will not always be possible, but trying to is good discipline. It may help you learn what you need to solve the problem on your own — and even when it doesn't, hackers like to see that you have tried. It will make them more cooperative.
+
+** Courtesy never hurts, and sometimes helps
+   Be courteous. Use “Please” and “Thanks for your attention” or “Thanks for your consideration”. Make it clear you appreciate the time people spend helping you for free.
+
+
+* How To Interpret Answers
+  RTFM and STFW: How To Tell You've Seriously Screwed Up
+** If you don't understand...
+   If you don't understand the answer, do not immediately bounce back a demand for clarification. Use the same tools that you used to try and answer your original question (manuals, FAQs, the Web, skilled friends) to understand the answer. Then, if you still need to ask for clarification, exhibit what you have learned.
+
+   For example, suppose I tell you: “It sounds like you've got a stuck zentry; you'll need to clear it.” Then: here's a bad followup question: “What's a zentry?” Here's a good followup question: “OK, I read the man page and zentries are only mentioned under the -z and -p switches. Neither of them says anything about clearing zentries. Is it one of these or am I missing something here?”
+
+** Dealing with rudeness
+   When you perceive rudeness, try to react calmly. If someone is really acting out, it is very likely a senior person on the list or newsgroup or forum will call him or her on it. If that doesn't happen and you lose your temper, it is likely that the person you lose it at was behaving within the hacker community's norms and you will be considered at fault. This will hurt your chances of getting the information or help you want.
+
+** On Not Reacting Like A Loser
+   Odds are you'll screw up a few times on hacker community forums — in ways detailed in this article, or similar. And you'll be told exactly how you screwed up, possibly with colourful asides. In public.
+
+   When this happens, the worst thing you can do is whine about the experience, claim to have been verbally assaulted, demand apologies, scream, hold your breath, threaten lawsuits, complain to people's employers, leave the toilet seat up, etc. Instead, here's what you do:
+
+   Get over it. It's normal. In fact, it's healthy and appropriate.
+
+
+
+
+* Pitfalls
+  - Beware of asking the wrong question. If you ask one that is based on faulty assumptions, J. Random Hacker is quite likely to reply with a uselessly literal answer while thinking “Stupid question...”, and hoping the experience of getting what you asked for rather than what you needed will teach you a lesson.
+  - Hackers blow off questions that are inappropriately targeted in order to try to protect their communications channels from being drowned in irrelevance. You don't want this to happen to you.
+
+* Schema
+** Before asking a technical question by e-mail, or in a newsgroup, or on a website chat board, do the following:
+   ~  Try to find an answer by searching the archives of the forum or mailing list you plan to post to.
+   ~  Try to find an answer by searching the Web.
+   ~  Try to find an answer by reading the manual.
+   ~  Try to find an answer by reading a FAQ.
+   ~  Try to find an answer by inspection or experimentation.
+   ~  Try to find an answer by asking a skilled friend.
+   ~  If you're a programmer, try to find an answer by reading the source code.
+
+** Use Google groups https://groups.google.com/
+
+** Stack Overflow
+   Search, then ask on Stack Exchange
+   - Super User is for questions about general-purpose computing. If your question isn't about code or programs that you talk to only over a network connection, it probably goes here.
+
+   - Stack Overflow is for questions about programming.
+
+   - Server Fault is for questions about server and network administration.
+
+** Web and IRC forums
+   Your local user group, or your Linux distribution, may advertise a Web forum or IRC channel where newbies can get help. (In non-English-speaking countries newbie forums are still more likely to be mailing lists.)
+
+** As a second step, use project mailing lists

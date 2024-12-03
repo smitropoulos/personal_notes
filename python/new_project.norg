@@ -1,0 +1,31 @@
+@document.meta
+title: new_project
+description:
+authors: smitropoulos
+categories: [
+python
+general
+configuration
+poetry
+cookiecutter
+]
+created: 2024-05-04T00:15:00+0200
+updated: 2024-05-04T00:15:00+0200
+version: 1.1.1
+@end
+
+* Docs
+  - [Py-pkg]{https://py-pkgs.org/03-how-to-package-a-python.html}
+    Good tutorial
+
+* [Cookiecutter]{https://github.com/cookiecutter/cookiecutter}
+  Good starting point for a src layout
+  @code bash
+  $ cookiecutter https://github.com/py-pkgs/py-pkgs-cookiecutter.git
+  @end
+
+* [Poetry]{https://python-poetry.org/}
+  - use `poetry shell` to enter a virtualenv for the project
+  - Use `poetry add` to add a dependency
+  - Use `poetry add --group dev` to add a dev dependency like pytest
+  - Use `poetry install` to install the dev environment

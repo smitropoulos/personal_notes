@@ -1,0 +1,50 @@
+@document.meta
+title: index
+description:
+authors: smitropoulos
+categories:
+created: 2024-04-12T13:03:17+0200
+updated: 2024-04-12T13:03:17+0200
+version: 1.1.1
+@end
+
+* Work summary
+** Conan
+  - {:$/cpp/conan:}[Conan]
+** Configuration
+  - {:$/python/pyproject_toml:}[Pyproject_toml]
+** Cpp
+  - {:$/cpp/conan:}[Conan]
+  - {:$/cpp/fmt:}[Fmt]
+  - {:$/cpp/linker_errors:}[Linker_errors] - Linker errors
+  - {:$/cpp/singleton:}[Singleton]
+  - {:$/cpp/spdlog:}[Spdlog]
+  - {:$/cpp/statics:}[Statics]
+  - {:$/cpp/networking/select_server:}[Select_server]
+  - {:$/cpp/networking/simple_server:}[Simple_server]
+** General
+  - {:$/general/asking_questions:}[Asking_questions]
+  - {:$/python/modules-packages:}[Modules-packages]
+  - {:$/python/pyproject_toml:}[Pyproject_toml]
+** Language
+  - {:$/cpp/statics:}[Statics]
+  - {:$/rust/rust_general:}[General]
+** Library
+  - {:$/cpp/fmt:}[Fmt]
+  - {:$/cpp/spdlog:}[Spdlog]
+** Networking
+  - {:$/networking/NAT:}[Nat]
+  - {:$/networking/beej:}[Beej] - Networking guide
+  - {:$/cpp/networking/select_server:}[Select_server]
+  - {:$/cpp/networking/simple_server:}[Simple_server]
+** Python
+  - {:$/python/modules-packages:}[Modules-packages]
+  - {:$/python/pyproject_toml:}[Pyproject_toml]
+** Rust
+  - {:$/rust/rust_general:}[General]
+** Tools
+  - {:$/cpp/conan:}[Conan]
+** Uncategorised
+  - {:$/index:}[Index]
+  - {:$/journal/index:}[Index]
+  - {:$/journal/2024/04/30:}[30]

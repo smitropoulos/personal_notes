@@ -1,0 +1,26 @@
+@document.meta
+title: statics
+description:
+authors: smitropoulos
+categories: [
+  cpp
+  language
+]
+created: 2024-04-15T23:34:28+0200
+updated: 2024-04-15T23:34:28+0200
+version: 1.1.1
+@end
+
+* Statics declaration
+  In a header file you might have this
+  @code cpp
+  class MyClass {
+  public:
+    static int number;
+  };
+  @end
+
+  and you need to define the `number` as such in a .cpp file
+  @code cpp
+  int MyClass::number = 5; 
+  @end

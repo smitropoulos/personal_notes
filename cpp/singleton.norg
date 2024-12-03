@@ -1,0 +1,127 @@
+@document.meta
+title: singleton
+description:
+authors: smitropoulos
+categories: [
+  cpp
+]
+created: 2024-04-14T15:59:59+0200
+updated: 2024-04-14T15:59:59+0200
+version: 1.1.1
+@end
+
+
+* Preferred method
+
+  ~ You should ensure the uniqueness of the Singleton instance by forbidding the copy operations.
+  ~ Similarly, you should assure the lifetime longevity of the Singleton instance by encapsulating its destructor in a private context.
+  ~ If multithreaded structures were used the race conditions must be prevented. Instead of implementing guard mechanisms using mutexes, you should consider using block-scoped static variables as their thread safety is managed by the compiler itself.
+  ~ If Singleton classes are not referring to each other, you can favor declaring your Singleton instance as a static member of your class. Be aware that your Singleton library might be used by others and you may want to prevent the static initialization order fiasco.
+
+  @code cpp
+  class SomeClass {
+  public: /** Singleton **/
+    static SomeClass &instance() {
+      static SomeClass singleInstance; // Block-scoped static Singleton instance
+      return singleInstance;
+    };
+  private: 
+    SomeClass() = default; // Private constructor
+    SomeClass(const SomeClass&) = delete; // Deleted copy constructor
+    SomeClass &operator=(const SomeClass&) = delete; // Deleted copy assignment
+    ~SomeClass() = default; // Private destructor
+  public: /** Methods **/
+    // ...
+  private: /** Members **/
+    // ...
+  }; 
+  @end
+
+  Notice the prave destructor. This makes sure on
+
+* Pointer singleton *NOT RECOMMENDED*
+
+  ~ Make all the constructors of the class private.
+  ~ Delete the copy constructor of the class.
+  ~ Make a private static pointer that can point to the same class object (singleton class).
+  ~ Make a public static method that returns the pointer to the same class object (singleton class).
+
+
+  @code cpp
+  /*
+  getInstance() is a static method that returns an
+  instance when it is invoked. It returns the same
+  instance if it is invoked more than once as an instance
+  of Singleton class is already created. It is static
+  because we have to invoke this method without any object
+  of Singleton class and static method can be invoked
+  without object of class
+
+  As constructor is private so we cannot create object of
+  Singleton class without a static method as they can be
+  called without objects. We have to create an instance of
+  this Singleton class by using getInstance() method.
+*/
+  using namespace std;
+
+  class Singleton{
+  private:
+    static Singleton* instancePtr;
+    // Default constructor
+    Singleton() {}
+  public:
+    // deleting copy constructor
+    Singleton(const Singleton& obj) = delete;
+
+    static Singleton* getInstance()
+    {
+      if (instancePtr == nullptr)
+      {
+        instancePtr = new Singleton();
+      }
+      return instancePtr;
+    }
+  };
+
+  // initializing instancePtr with nullptr
+  Singleton* Singleton::instancePtr = nullptr;
+  @end
+
+
+* Reference singleton (Meyer's singleton)
+
+  ~ Make all the constructors of the class private.
+  ~ Delete the copy constructor of the class.
+  ~ Make a public static method that returns a static reference to the singleton. From the specification of C++:
+  > The static local variables of a function initialize when the function is first called. It is called lazy initialization. Lazy initialization declares the tactic of delaying the creation of an object, the calculation of a value, or some other expensive process until the first time it is needed. So, how does it affect the singleton?
+  > Your run-time code decides on whether to execute the first part by checking if it was executed before
+
+  *Care for the [static initialization order fiasco]{https://isocpp.org/wiki/faq/ctors#static-init-order}*
+
+  Having a non-trivial public destructor for this, will probably result in the Destruction Order Fiasco, the equivalent of the initialization but for Destruction.
+
+  As per Scott Meyer
+  > "This approach is founded on C++'s guarantee that local static objects are initialized when the object's definition is first encountered during a call to that function." ... "As a bonus, if you never call a function emulating a non-local static object, you never incur the cost of constructing and destructing the object."
+
+  @code cpp
+  class SomeClass {
+  public: /** Singleton **/
+    static SomeClass& instance() {
+      static SomeClass singleInstance;
+      return singleInstance;
+    };
+  private:
+    SomeClass() = default;
+  };
+  int main() {
+    SomeClass someObject;   // ERROR: SomeClass() is private within this context
+
+    return 0;
+  }
+  @end
+
+
+* Destruction of the Singleton
+  We always think of the Singleton pattern as a one-time constructible class. Have you ever thought about the destruction of it? The destruction of the Singleton instances is generally omitted because they generally live until the very end of the program. This aspect of Singletons makes them not considered as a cause of memory leakage.
+
+  On the other hand, a Singleton class might not use only memory as a resource. It can have other kinds of resources that are related to the system such as sockets, message queues, etc. Those resources should also be related when destructing the Singleton instances.

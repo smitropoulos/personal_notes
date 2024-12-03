@@ -1,0 +1,27 @@
+@document.meta
+title: linker_errors
+description: Linker errors
+authors: smitropoulos
+categories: [
+  cpp
+]
+created: 2024-04-15T20:24:10+0200
+updated: 2024-04-15T20:24:10+0200
+version: 1.1.1
+@end
+
+* Vtable errors
+
+** Undefined symbols / Vtable entry missing
+   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
+   *Check constructors and destructors! Destructors will make constructors fail when they have no definitions*
+
+   @code bash
+   Undefined symbols for architecture arm64:
+   "vtable for In_mem_cache", referenced from:
+   In_mem_cache::In_mem_cache() in in_mem_cache.cpp.o
+   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
+   "vtable for Cache", referenced from:
+   Cache::Cache() in in_mem_cache.cpp.o
+   NOTE: a missing vtable usually means the first non-inline virtual member function has no definition.
+   @end

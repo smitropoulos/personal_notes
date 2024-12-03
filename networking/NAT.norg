@@ -1,0 +1,27 @@
+@document.meta
+title: NAT
+description:
+authors: smitropoulos
+categories: [
+  networking
+]
+created: 2024-07-05T13:36:08+0200
+updated: 2024-07-05T13:36:08+0200
+version: 1.1.1
+@end
+
+[Practical Networking website]{https://www.practicalnetworking.net/series/nat/nat-terminology/#types-of-nat}
+
+* [Why NAT?]{https://www.practicalnetworking.net/series/nat/why-nat/}
+** [RFC 1918]{https://tools.ietf.org/html/rfc1918}
+
+   RFC 1918 designated three different address sets that were considered free to use and reuse by any organization:
+
+   - 10.0.0.0 /8 – any IP address in the range of   10.#.#.#
+   - 172.16.0.0 /12 – any IP address in the range of 172.\[16-31\].#.#
+   - 192.168.0.0 /16 – any IP address in the range of 192.168.#.#
+
+   These addresses were labeled as Private addresses, and were deemed unroutable on the Internet. All the remaining addresses remained Public addresses, and able to be routed on the Internet.
+   With RFC 1918, if you had 30 hosts on your network, all 30 of them would use 30 unique Private IP addresses, but for Internet facing traffic, all 30 could share a single Public address. Allowing you to conserve 29 Public addresses.
+
+

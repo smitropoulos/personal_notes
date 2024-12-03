@@ -1,0 +1,57 @@
+@document.meta
+title: modules-packages
+description:
+authors: smitropoulos
+categories: [
+python
+general
+]
+created: 2024-05-02T14:12:50+0200
+updated: 2024-05-02T14:12:50+0200
+version: 1.1.1
+@end
+
+* Docs
+  - [Packages docs]{https://docs.python.org/3/tutorial/modules.html#packages}
+
+* Modules
+  What is a Module?
+  Consider a module to be the same as a code library.
+  A file containing a set of functions you want to include in your application.
+
+  in a file mymodule.py:
+
+  @code python
+  def greeting(name):
+    print("Hello, " + name)
+  @end
+
+  You can now import it as:
+  @code python
+  import mymodule
+  @end
+
+** Using the dir() function
+   Use `dir(mymodule)` to print all the functions inside a module
+
+* Packages
+  Collection of modules
+
+** The __init__.py file
+   Include an __init__.py file in the package directory.
+   This file can be empty or can contain an initialization code for your package. It signals to Python that the directory should be treated as a package.
+
+   __init__.py is recommended to import the directory as a regular package, even if as is our case for this tutorial that file is empty [1].
+
+
+** Subpackages
+   You can create sub-packages within your package by adding additional directories containing modules, along with their own __init__.py files.
+
+* General structure
+  @code bash
+  packaging_tutorial/
+  └── src/
+        └── example_package_YOUR_USERNAME_HERE/
+              ├── __init__.py
+              └── example.py
+  @end
